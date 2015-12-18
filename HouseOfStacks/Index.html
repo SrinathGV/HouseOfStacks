@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="Scripts/jquery-1.9.1.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <link href="Scripts/HouseOfStacks.css" type="text/css" rel="stylesheet" />
+    <script src="Scripts/JqUI/jquery-ui.min.js"></script>
+    <link href="Scripts/JqUI/jquery-ui.min.css" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="http://www.amcharts.com/lib/3/ammap.js"></script>
+    <script src="http://www.amcharts.com/lib/3/maps/js/worldLow.js"></script>
+    <script src="http://www.amcharts.com/lib/3/themes/dark.js"></script>
+    <script type="text/javascript" src="Scripts/jquery.jqplot.min.js"></script>
+    <script src="Scripts/jqplot.pieRenderer.min.js" type="text/javascript"></script>
+    <link href="Scripts/jquery.jqplot.min.css" type="text/css" rel="stylesheet"/>
+    <!--<script src="Scripts/jquery.autocomplete.min.js"></script>-->
+    <!--<script src="Scripts/MapJS.js"></script>-->
+    <script src="Scripts/HouseOfStacks.js"></script>
+    <link href="Scripts/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
+</head>
+
+<body>
+    <div class="col-md-12" id="box">
+        <div class="row">
+            <div id="logo_small" class="col-md-9" style="display:none">
+
+                <img src="img/logo.JPG" class="col-md-4" style="width:10%;height:10%" />
+                <div class="col-md-8" style="padding: 15px;padding-left: 0px;">
+                    <input type="text" class="form-control typeahead" placeholder="Search" id="query_small" style="">                    
+                    <div class="suggests list-group col-md-11" style="z-index:100000;position:absolute">
+                        <ul>
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3" style="margin-left:-28px !important;padding-top:15px;">
+
+                    <button id="search_small" type="button" class="btn btn-default" aria-label="Left Align">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="row" style="padding-left:15px;padding-right:15px">
+                    <div class="col-md-5" style="margin-top:-12px !important;margin-bottom:10px;padding-left:0px">
+                        <div id="time-range">
+                            <div class="row" style="padding-left: 15px !important;padding-right:15px !important">
+                                <div class="col-md-4 pagination-centered" style="text-align:center">
+                                    <span class="slider-time"></span>
+                                </div>
+                                <div class="col-md-4 col-md-offset-4 pagination-centered" style="text-align:center">
+                                    <span class="slider-time2"></span>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-left: 20px !important;padding-right:15px !important">
+                                <div class="sliders_step1">
+                                    <div id="slider-range_small"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-4" style="margin-bottom:10px;margin-top:-12px">
+                        <div class="row">
+                            <div class="btn-group col-md-6 no-padding" style="margin-top:10px;padding-right:0px">
+                                <button type="button" class="btn btn-default btn-sm dropdown-toggle lang-selection" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Language <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu language-dropdown">
+                                    <li><a href="#" class="lang-selector All">All Languages</a></li>
+                                    <li><a href="#" class="lang-selector English">English</a></li>
+                                    <li><a href="#" class="lang-selector Russian">Russian</a></li>
+                                    <li><a href="#" class="lang-selector German">German</a></li>
+                                    <li><a href="#" class="lang-selector French">French</a></li>
+                                    <li><a href="#" class="lang-selector Arabic">Arabic</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6 no-padding" style="margin-top:10px;">
+                                <select class="country-select" style="width:90%;overflow-y: auto;max-height:45px;">
+                                    <option></option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    
+                </div>
+            </div>
+
+        </div>
+        <div id="logo_big">
+            <div class="row">
+                <div id="logo" class="col-md-6 col-md-offset-5">
+
+                    <img src="img/logo.JPG" class="col-md-4" />
+
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3" id="suggest">
+                    <input type="text" class="form-control" placeholder="Search" id="query">
+                    <div class="suggests list-group col-md-11" style="z-index:100000;position:absolute">
+
+                    </div>
+                </div>
+                <div class="col-md-3" style="margin-left:-28px !important;">
+
+                    <button id="search" type="button" class="btn btn-default" aria-label="Left Align">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3" style="padding-left: 20px !important">
+                    <div id="time-range">
+                        <div class="row" style="padding-left: 15px !important;padding-right:15px !important">
+                            <div class="col-md-3 pagination-centered" style="text-align:center">
+                                <span class="slider-time" aria-hidden="true"></span>
+                            </div>
+                            <div class="col-md-3 col-md-offset-6 pagination-centered" style="text-align:center">
+                                <span class="slider-time2" aria-hidden="true"></span>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-left: 20px !important;padding-right:15px !important">
+                            <div class="sliders_step1">
+                                <div id="slider-range"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div> 
+                
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 loading" id="loading" style="display:none;text-align:center;margin-bottom:20%">
+                    <img src="img/loading_kitten.gif" />
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+    <div class="col-md-8" id="results_div">
+        <div id="products" class="col-md-12">
+
+        </div>
+        <div class="col-md-12" id="noresults" style="display:none;text-align:center">
+            <h2>No results found!! Try changing the query or dance with us!!</h2>
+            <img src="img/noresults.gif" />
+        </div>
+        <div class="col-md-12 loading" id="loading_small" style="display:none;text-align:center">
+            <img src="img/loading_kitten.gif" />
+        </div>
+    </div>
+    
+    <div id="sentiment" class="col-md-4" style="float:right;height:1px">
+        <!--<div class="sentiment-loader" style="text-align:center">
+            <i class="fa fa-spinner fa-3x"></i>
+        </div>-->
+    </div>
+    <div id="summary" class="col-md-4" style="display:none;float:right;">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="text-align:center"></div>
+            <div class="panel-body"></div>
+        </div>
+        <div class="summary-loader" style="text-align:center">
+            <i class="fa fa-spinner fa-3x"></i>
+        </div>
+    </div>
+
+    <div id="mapTag" class="col-md-4 pull-right" style="display:none;min-height:200px;float:right;">
+        <!--<div id="mapTag"></div>-->
+        <div class="map-loader" style="text-align:center">
+            <i class="fa fa-spinner fa-3x"></i>
+        </div>
+    </div>
+</body>
+</html>
