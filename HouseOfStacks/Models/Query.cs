@@ -9,30 +9,39 @@ using System;
 
 namespace two.Models
 {
-  public class Query
-  {
-    [JsonProperty("Query")]
-    public string QueryText { get; set; }
+    public class Query
+    {
+        [JsonProperty("Query")]
+        public string QueryText { get; set; }
 
-    [JsonProperty("Lang")]
-    public string Lang { get; set; }
+        [JsonProperty("Lang")]
+        public string Lang { get; set; }
 
-    [JsonProperty("HashTag")]
-    public string HashTag { get; set; }
+        [JsonProperty("HashTag")]
+        public string HashTag { get; set; }
 
-    [JsonProperty("StartTime")]
-    public DateTime StartTime { get; set; }
+        [JsonProperty("StartTime")]
+        public DateTime StartTime { get; set; }
 
-    [JsonProperty("EndTime")]
-    public DateTime EndTime { get; set; }
+        [JsonProperty("EndTime")]
+        public DateTime EndTime { get; set; }
 
-    [JsonProperty("MinRelevance")]
-    public int MinRelevance { get; set; }
+        [JsonProperty("MinRelevance")]
+        public int MinRelevance { get; set; }
 
-    [JsonProperty("Location")]
-    public string Location { get; set; }
+        [JsonProperty("Country")]
+        public string Country { get; set; }
 
-    [JsonProperty("TimeLineChange")]
-    public bool IsTimeLineChange { get; set; }
-  }
+        [JsonProperty("Organization")]
+        public string Organization { get; set; }
+
+        [JsonProperty("Location")]
+        public string Location { get; set; }
+
+        [JsonProperty("People")]
+        public string People { get; set; }
+
+        [JsonProperty("TimeLineChange")]
+        public bool IsTimeLineChange { get; set; }
+    }
 }

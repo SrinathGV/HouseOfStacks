@@ -12,5 +12,8 @@ namespace two.Models
   {
     public List<LangCount> codes = new List<LangCount>();
     public List<MapCode> mapData = new List<MapCode>();
-  }
+        public Dictionary<string, int> organization = new Dictionary<string, int>();
+        public Dictionary<string, int> people = new Dictionary<string, int>();
+        public Dictionary<string, int> location = new Dictionary<string, int>();
+    }
 }

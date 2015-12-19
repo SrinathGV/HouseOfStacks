@@ -128,9 +128,6 @@ namespace two.Controllers
                     }
                 }
 
-                DateTime from1;
-                // ISSUE: explicit reference operation
-                // ISSUE: variable of a reference type
                 int year1 = query.StartTime.Year;
                 DateTime dateTime = query.StartTime;
                 int month1 = dateTime.Month;
@@ -165,9 +162,9 @@ namespace two.Controllers
 
                     abstractSolrQuery1 = abstractSolrQuery1 & (AbstractSolrQuery)new SolrQuery("tweet_hashtags:" + query.HashTag);
                 }
-                if (!string.IsNullOrEmpty(query.Location) && !string.IsNullOrWhiteSpace(query.Location))
+                if (!string.IsNullOrEmpty(query.Country) && !string.IsNullOrWhiteSpace(query.Country))
                 {
-                    abstractSolrQuery1 = abstractSolrQuery1 & (AbstractSolrQuery)new SolrQuery("locationcode:" + Enumerable.First<MapCode>((IEnumerable<MapCode>)MapData.MapCodes, (Func<MapCode, bool>)(i => i.name.Equals(query.Location))).code);
+                    abstractSolrQuery1 = abstractSolrQuery1 & (AbstractSolrQuery)new SolrQuery("locationcode:" + Enumerable.First<MapCode>((IEnumerable<MapCode>)MapData.MapCodes, (Func<MapCode, bool>)(i => i.name.Equals(query.Country))).code);
                 }
                 if (query.IsTimeLineChange)
                 {
@@ -189,7 +186,7 @@ namespace two.Controllers
                     abstractSolrQuery1 = abstractSolrQuery1 & (AbstractSolrQuery)new SolrQueryByRange<DateTime>("created_at", start, to);
                 }
                 ISolrOperations<Tweet> solrOperations = instance;
-                
+
                 QueryOptions queryOptions = new QueryOptions();
                 queryOptions.Fields = (ICollection<string>)new string[2]
                 {
@@ -199,10 +196,13 @@ namespace two.Controllers
                 queryOptions.Rows = new int?(20);
                 queryOptions.Facet = new FacetParameters()
                 {
-                    Queries = (ICollection<ISolrFacetQuery>)new SolrFacetFieldQuery[2]
+                    Queries = (ICollection<ISolrFacetQuery>)new SolrFacetFieldQuery[5]
                   {
-            new SolrFacetFieldQuery("locationcode"),
-            new SolrFacetFieldQuery("lang")
+                    new SolrFacetFieldQuery("locationcode"),
+                    new SolrFacetFieldQuery("lang"),
+                    new SolrFacetFieldQuery("Entity_Organizaton"),
+                    new SolrFacetFieldQuery("Entity_Location"),
+                    new SolrFacetFieldQuery("Entity_People")
                   }
                 };
                 QueryOptions options = queryOptions;
@@ -219,12 +219,27 @@ namespace two.Controllers
                 foreach (KeyValuePair<string, int> keyValuePair in (IEnumerable<KeyValuePair<string, int>>)solrQueryResults.FacetFields["locationcode"])
                 {
                     KeyValuePair<string, int> facet = keyValuePair;
-                    MapCode mapCode = Enumerable.First<MapCode>((IEnumerable<MapCode>)MapData.MapCodes, (Func<MapCode, bool>)(i => i.code.Equals(facet.Key, StringComparison.CurrentCultureIgnoreCase)));
+                    MapCode mapCode = Enumerable.FirstOrDefault<MapCode>((IEnumerable<MapCode>)MapData.MapCodes, (Func<MapCode, bool>)(i => i.code.Equals(facet.Key, StringComparison.CurrentCultureIgnoreCase)));
                     if (mapCode != null)
                     {
                         mapCode.value = facet.Value;
                         content.mapData.Add(mapCode);
                     }
+                }
+                foreach (KeyValuePair<string, int> keyValuePair in (IEnumerable<KeyValuePair<string, int>>)solrQueryResults.FacetFields["Entity_Organizaton"])
+                {
+                    KeyValuePair<string, int> facet = keyValuePair;
+                    content.organization.Add(facet.Key, facet.Value);
+                }
+                foreach (KeyValuePair<string, int> keyValuePair in (IEnumerable<KeyValuePair<string, int>>)solrQueryResults.FacetFields["Entity_Location"])
+                {
+                    KeyValuePair<string, int> facet = keyValuePair;
+                    content.location.Add(facet.Key, facet.Value);
+                }
+                foreach (KeyValuePair<string, int> keyValuePair in (IEnumerable<KeyValuePair<string, int>>)solrQueryResults.FacetFields["Entity_People"])
+                {
+                    KeyValuePair<string, int> facet = keyValuePair;
+                    content.people.Add(facet.Key,facet.Value);
                 }
             }
             catch (Exception ex)
@@ -323,7 +338,7 @@ namespace two.Controllers
             List<Tweet> list = (List<Tweet>)null;
             Dictionary<string, string> dictionary = new Dictionary<string, string>();
             SearchController.admAuth.GetAccessToken();
-            
+
             AbstractSolrQuery abstractSolrQuery1 = (AbstractSolrQuery)null;
             if (!string.IsNullOrEmpty(query.Lang) && !string.IsNullOrWhiteSpace(query.Lang))
             {
@@ -351,13 +366,13 @@ namespace two.Controllers
                         }
                         else
                         {
-                            
+
                             abstractSolrQuery1 = abstractSolrQuery1 | (AbstractSolrQuery)new SolrQuery(keyValuePair.Key + ":" + keyValuePair.Value);
                         }
                     }
                 }
             }
-            
+
             DateTime from1;
             // ISSUE: explicit reference operation
             // ISSUE: variable of a reference type
@@ -389,20 +404,20 @@ namespace two.Controllers
             {
                 abstractSolrQuery1 = abstractSolrQuery1 & (AbstractSolrQuery)new SolrQuery(query.QueryText);
             }
-            
+
             if (!string.IsNullOrEmpty(query.HashTag) && !string.IsNullOrWhiteSpace(query.HashTag))
             {
-                
+
                 abstractSolrQuery1 = abstractSolrQuery1 & (AbstractSolrQuery)new SolrQuery("tweet_hashtags:" + query.HashTag);
             }
-            if (!string.IsNullOrEmpty(query.Location) && !string.IsNullOrWhiteSpace(query.Location))
+            if (!string.IsNullOrEmpty(query.Country) && !string.IsNullOrWhiteSpace(query.Country))
             {
-                abstractSolrQuery1 = abstractSolrQuery1 & (AbstractSolrQuery)new SolrQuery("locationcode:" + Enumerable.First<MapCode>((IEnumerable<MapCode>)MapData.MapCodes, (Func<MapCode, bool>)(i => i.name.Equals(query.Location))).code);
+                abstractSolrQuery1 = abstractSolrQuery1 & (AbstractSolrQuery)new SolrQuery("locationcode:" + Enumerable.First<MapCode>((IEnumerable<MapCode>)MapData.MapCodes, (Func<MapCode, bool>)(i => i.name.Equals(query.Country))).code);
             }
             if (query.IsTimeLineChange)
             {
                 DateTime from2;
-                
+
                 dateTime = query.StartTime;
                 int year3 = dateTime.Year;
                 dateTime = query.StartTime;
@@ -410,12 +425,12 @@ namespace two.Controllers
                 dateTime = query.StartTime;
                 int day3 = dateTime.Day;
                 from2 = new DateTime(year3, month3, day3);
-                
+
                 abstractSolrQuery1 = abstractSolrQuery1 & (AbstractSolrQuery)new SolrQueryByRange<DateTime>("created_at", from2, from2.AddDays(1.0));
             }
             if (!query.IsTimeLineChange)
             {
-                
+
                 abstractSolrQuery1 = abstractSolrQuery1 & (AbstractSolrQuery)new SolrQueryByRange<DateTime>("created_at", start, to);
             }
             ISolrOperations<Tweet> instance = ServiceLocator.Current.GetInstance<ISolrOperations<Tweet>>();
@@ -423,7 +438,7 @@ namespace two.Controllers
             try
             {
                 ISolrOperations<Tweet> solrOperations = instance;
-                
+
                 QueryOptions queryOptions = new QueryOptions();
                 queryOptions.Fields = (ICollection<string>)new string[2]
                 {

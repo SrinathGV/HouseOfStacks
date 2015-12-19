@@ -286,6 +286,11 @@ $(document).ready(function () {
         }
     });
 
+    $('#advOptions').click(function (e) {
+        $("#Dialog").dialog({ });
+
+    });
+
     $("#slider-range,#slider-range_small").children('span').each(function (key) {
         if (key % 2 == 1) {
             $(this).addClass('fa fa-backward');
@@ -326,6 +331,25 @@ $(document).ready(function () {
         });
         $(ul).find("li:odd").addClass("odd");
     };
+
+    $('#advFilterApply').on("click", function (e) {
+
+        var trimmedLanguage = $(".country-select option:selected").text();
+        Query["Country"] = trimmedLanguage.substring(0, trimmedLanguage.indexOf("(") - 1);
+
+        trimmedLanguage = $(".organization-select option:selected").text();        
+        Query["Organization"] = trimmedLanguage.substring(0, trimmedLanguage.indexOf("(") - 1);
+
+        trimmedLanguage = $(".location-select option:selected").text();
+        Query["Location"] = trimmedLanguage.substring(0, trimmedLanguage.indexOf("(") - 1);
+
+        trimmedLanguage = $(".people-select option:selected").text();
+        Query["People"] = trimmedLanguage.substring(0, trimmedLanguage.indexOf("(") - 1);
+        
+        $('#myModal').modal('hide');
+        //Query["Country"] = $(".country-select option:selected").text();;                
+        $('#search_small').click();
+    });
     $('.lang-selector').click(function () {
         var queryTerm = $('#logo_small').is(":visible") ? $('#query_small').val() : $('#query').val();
         $('#noresults').hide();
@@ -362,69 +386,7 @@ $(document).ready(function () {
         GetMapDataAndPaint(Query);
         GetSentimentData(Query);
     });
-    //$('#query,#query_small').on('keyup', function (ev) {
-
-    //    ev.stopPropagation();
-    //    ev.preventDefault();
-
-    //    //filter out up/down, tab, enter, and escape keys
-    //    if ($.inArray(ev.keyCode, [40, 38, 9, 13, 27]) === -1) {
-
-    //        var self = $(this);
-
-    //        //set typeahead source to empty
-    //        //self.data('typeahead').source = [];
-    //        if ($(this).val().length == 0)
-    //        {
-    //            $('.suggests').empty();
-    //            return;
-    //        }
-    //        if ($('.suggests').first().val() == $(this).val())
-    //        {
-    //            return;
-
-    //        }
-
-    //        //active used so we aren't triggering duplicate keyup events
-    //        if (!self.data('active') && self.val().length > 0) {
-
-    //            self.data('active', true);
-    //            var query = $(this).val();
-    //            //Do data request. Insert your own API logic here.
-    //            $.get("Test/Suggest/"+query, function (data) {
-
-    //                //set this to true when your callback executes
-    //                self.data('active', true);
-    //                $('.suggests').empty();
-    //                //Filter out your own parameters. Populate them into an array, since this is what typeahead's source requires
-    //                var arr = [],
-    //                    i = data.length;
-    //                while (i--) {
-    //                    if (data[i].name == query)
-    //                    {
-    //                        $('.suggests').append('<li href="#" class="list-group-item active" style="cursor:pointer">' + data[i].name + '</li>')
-    //                    }
-    //                    else {
-    //                        $('.suggests').append('<li href="#" class="list-group-item" style="cursor:pointer">' + data[i].name + '</li>')
-    //                    }
-
-    //                }
-    //                $('.suggests').append('<li role="presentation" class="sbsb_c gsfs sbsb_d" dir="ltr" style="text-align: left;"><div role="option" id="sbse2"><div class="sbqs_a"></div><div class="sbqs_c">hell<b>o</b></div></div></li>');
-
-
-
-    //                //trigger keyup on the typeahead to make it search
-    //                self.trigger('keyup');
-
-    //                //All done, set to false to prepare for the next remote query.
-    //                self.data('active', false);
-
-    //            });
-
-    //        }
-    //    }
-    //});;
-
+    
     // Send an AJAX request
 
     $('#search,#search_small').click(function () {
@@ -693,15 +655,15 @@ function GetMapDataAndPaint(Query) {
             var max = -Infinity;
             CountryData = mapData.map(function (k) { return k.name });
             
-            //if (Query["Location"] && Query["Location"].length > 0) {
-            //    $(".country-select").val(Query["Location"]);
+            //if (Query["Country"] && Query["Country"].length > 0) {
+            //    $(".country-select").val(Query["Country"]);
             //}
 
             $('.country-select').empty();
             $('.country-select').append('<option></option>');
 
             $.each(mapData, function (i, e) {
-                if (e.name == Query["Location"])
+                if (e.name == Query["Country"])
                 {
                     $('.country-select').append('<option selected="selected">' + e.name + " (" + e.value + ")" + '</option>');
                 }
@@ -717,17 +679,67 @@ function GetMapDataAndPaint(Query) {
                 allowClear: true,
             });
             
-            
-            
-            $('.country-select').on("change", function (e) {
-                var trimmedLanguage = $(".country-select option:selected").text();
-
-                Query["Location"] = trimmedLanguage.substring(0, trimmedLanguage.indexOf("(") - 1);
-                //Query["Location"] = $(".country-select option:selected").text();;                
-                $('#search_small').click();
+            $('.organization-select').empty();
+            $('.organization-select').append('<option></option>');
+            $.each(data["organization"], function (i, e) {
+                if (Query["Organization"] && e.name == Query["Organization"]) {
+                    $('.organization-select').append('<option selected="selected">' + i + " (" + e + ")" + '</option>');
+                }
+                else {
+                    $('.organization-select').append('<option>' + i + " (" + e + ")" + '</option>');
+                }
             });
-            //$(".country-select").select2("data", CountryData, true);;
-            //$(".country-select").select2("updateResults");
+
+            $('.location-select').empty();
+            $('.location-select').append('<option></option>');
+            $.each(data["location"], function (i, e) {
+                if (Query["location"] && e.name == Query["location"]) {
+                    $('.location-select').append('<option selected="selected">' + i + " (" + e + ")" + '</option>');
+                }
+                else {
+                    $('.location-select').append('<option>' + i + " (" + e + ")" + '</option>');
+                }
+
+            });
+
+            $('.people-select').empty();
+            $('.people-select').append('<option></option>');
+            $.each(data["people"], function (i, e) {
+                if (Query["people"] && i == Query["people"]) {
+                    $('.people-select').append('<option selected="selected">' + i + " (" + e + ")" + '</option>');
+                }
+                else {
+                    $('.people-select').append('<option>' + i + " (" + e + ")" + '</option>');
+                }
+
+            });
+
+            $(".people-select").select2({
+                placeholder: "People",
+                dropdownAutoWidth: true,
+                allowClear: true,
+            });
+
+            $(".location-select").select2({
+                placeholder: "Location",
+                dropdownAutoWidth: true,
+                allowClear: true,
+            });
+
+            $(".organization-select").select2({
+                placeholder: "Organization",
+                dropdownAutoWidth: true,
+                allowClear: true,
+            });
+
+            //$('#advFilterApply').on("click", function (e) {
+            //    var trimmedLanguage = $(".country-select option:selected").text();
+
+            //    Query["Country"] = trimmedLanguage.substring(0, trimmedLanguage.indexOf("(") - 1);
+            //    //Query["Country"] = $(".country-select option:selected").text();;                
+            //    $('#search_small').click();
+            //});
+            
             // get min and max values
             for (var i = 0; i < mapData.length; i++) {
                 var value = mapData[i].value;
