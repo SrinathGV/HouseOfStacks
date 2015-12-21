@@ -12,6 +12,7 @@ using SolrNet;
 using SolrNet.Commands.Parameters;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -36,8 +37,8 @@ namespace two.Controllers
       "en",
       "ru"
         };
-        private static AdmAuthentication admAuth = new AdmAuthentication("HouseOfStacks_tapi", "Tesh5nGWivUIL1+u1gpKmpfD+y8lYp04n34P/cFtZAg=");
-        private static string bingKey = "9fMtpG/m+nV6NKyDukopZPBp1QsvbDtnyP/h0MkaqFo";
+        private static AdmAuthentication admAuth = new AdmAuthentication("HouseOfStacks_tapi", ConfigurationManager.ConnectionStrings["admAuth"].ConnectionString);
+        private static string bingKey = ConfigurationManager.ConnectionStrings["bingKey"].ConnectionString;
         private static Dictionary<string, string> LangMap = new Dictionary<string, string>()
     {
       {
@@ -265,7 +266,7 @@ namespace two.Controllers
         public IHttpActionResult GetSuggestions(string query)
         {
             List<Suggestions> content = new List<Suggestions>();
-            WebResponse response = WebRequest.Create("http://104.45.155.213:8983/solr/IR_core/suggest?suggest=true&suggest.dictionary=mySuggester&wt=json&suggest.q=" + HttpUtility.UrlEncode(query)).GetResponse();
+            WebResponse response = WebRequest.Create(ConfigurationManager.ConnectionStrings["SolrNet"]+"/suggest?suggest=true&suggest.dictionary=mySuggester&wt=json&suggest.q=" + HttpUtility.UrlEncode(query)).GetResponse();
             using (response.GetResponseStream())
             {
                 Encoding utF8 = Encoding.UTF8;
@@ -544,7 +545,7 @@ namespace two.Controllers
             try
             {
                 BingSearchContainer bingSearchContainer = new BingSearchContainer(new Uri("https://api.datamarket.azure.com/Bing/Search"));
-                string bing_key = "5NpgJedEC/5sS5UNPGkWnPeN3xy9CpgNlU/JHB5S3FQ";
+                string bing_key = ConfigurationManager.ConnectionStrings["bing_key"].ConnectionString;
                 //NetworkCredential networkCredential = new NetworkCredential(bing_key, bing_key);
                 bingSearchContainer.Credentials = new NetworkCredential(bing_key, bing_key);
                 string Query = query + " wiki";
