@@ -166,6 +166,18 @@ namespace two.Controllers
                 {
                     abstractSolrQuery1 = abstractSolrQuery1 & (AbstractSolrQuery)new SolrQuery("locationcode:" + Enumerable.First<MapCode>((IEnumerable<MapCode>)MapData.MapCodes, (Func<MapCode, bool>)(i => i.name.Equals(query.Country))).code);
                 }
+                if (!string.IsNullOrEmpty(query.Organization) && !string.IsNullOrWhiteSpace(query.Organization))
+                {
+                    abstractSolrQuery1 = abstractSolrQuery1 & (AbstractSolrQuery)new SolrQuery("Entity_Organizaton:" + query.Organization);
+                }
+                if (!string.IsNullOrEmpty(query.People) && !string.IsNullOrWhiteSpace(query.People))
+                {
+                    abstractSolrQuery1 = abstractSolrQuery1 & (AbstractSolrQuery)new SolrQuery("Entity_People:" + query.People);
+                }
+                if (!string.IsNullOrEmpty(query.Location) && !string.IsNullOrWhiteSpace(query.Location))
+                {
+                    abstractSolrQuery1 = abstractSolrQuery1 & (AbstractSolrQuery)new SolrQuery("Entity_Location:" + query.Location);
+                }
                 if (query.IsTimeLineChange)
                 {
                     DateTime from2;
@@ -283,7 +295,7 @@ namespace two.Controllers
             //return (IHttpActionResult)this.Ok<SentimentResult>(content);
             using (HttpClient httpClient = new HttpClient())
             {
-                ResultSet results = this.GetResults(query);
+                ResultSet results = this.GetResults(query,false);
                 httpClient.BaseAddress = new Uri("https://api.datamarket.azure.com/");
                 string str1 = "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes("AccountKey:" + SearchController.bingKey));
                 httpClient.DefaultRequestHeaders.Add("Authorization", str1);
@@ -330,10 +342,10 @@ namespace two.Controllers
         [HttpPost]
         public IHttpActionResult Get(Query query)
         {
-            return (IHttpActionResult)this.Ok<ResultSet>(this.GetResults(query));
+            return (IHttpActionResult)this.Ok<ResultSet>(this.GetResults(query,true));
         }
 
-        private ResultSet GetResults(Query query)
+        private ResultSet GetResults(Query query,bool isSummaryRequired)
         {
             List<Tweet> list = (List<Tweet>)null;
             Dictionary<string, string> dictionary = new Dictionary<string, string>();
@@ -478,12 +490,17 @@ namespace two.Controllers
             }
             else
                 rs.result = new List<Tweet>();
-            if (dictionary.ContainsKey("text_en"))
+
+            if(isSummaryRequired)
             {
-                this.GetWikiSummary(dictionary["text_en"], rs);
-                if (query.QueryText != dictionary["text_en"])
-                    rs.translation = dictionary["text_en"];
+                if (dictionary.ContainsKey("text_en"))
+                {
+                    this.GetWikiSummary(dictionary["text_en"], rs);
+                    if (query.QueryText != dictionary["text_en"])
+                        rs.translation = dictionary["text_en"];
+                }
             }
+            
             return rs;
         }
 
@@ -528,8 +545,8 @@ namespace two.Controllers
             {
                 BingSearchContainer bingSearchContainer = new BingSearchContainer(new Uri("https://api.datamarket.azure.com/Bing/Search"));
                 string bing_key = "5NpgJedEC/5sS5UNPGkWnPeN3xy9CpgNlU/JHB5S3FQ";
-                NetworkCredential networkCredential = new NetworkCredential(bing_key, bing_key);
-                bingSearchContainer.Credentials = new NetworkCredential(bingKey, bingKey);
+                //NetworkCredential networkCredential = new NetworkCredential(bing_key, bing_key);
+                bingSearchContainer.Credentials = new NetworkCredential(bing_key, bing_key);
                 string Query = query + " wiki";
 
                 foreach (WebResult webResult in bingSearchContainer.Web(Query, null, null, null, null, null, null, null).AddQueryOption("$top", (object)10).Execute())

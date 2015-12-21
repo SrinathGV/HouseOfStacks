@@ -155,6 +155,12 @@
     <Content Include="scripts\jquery.autocomplete.min.js" />
     <Content Include="scripts\jquery.jqplot.min.css" />
     <Content Include="scripts\jquery.jqplot.min.js" />
+    <Content Include="scripts\JqUI\jquery-ui.min.css" />
+    <Content Include="scripts\JqUI\jquery-ui.min.js" />
+    <Content Include="scripts\JqUI\jquery-ui.structure.css" />
+    <Content Include="scripts\JqUI\jquery-ui.structure.min.css" />
+    <Content Include="scripts\JqUI\jquery-ui.theme.css" />
+    <Content Include="scripts\JqUI\jquery-ui.theme.min.css" />
     <Content Include="scripts\MapJS.js" />
     <Content Include="scripts\pie.js" />
     <Content Include="scripts\typeAhead.js" />
@@ -192,6 +198,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="Properties\PublishProfiles\HouseOfStack.pubxml" />
+    <None Include="Properties\PublishProfiles\HouseOfStacks %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\HouseOfStacks.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -202,7 +211,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="scripts\Carot\" />
-    <Folder Include="scripts\JqUI\" />
     <Folder Include="scripts\swf\" />
   </ItemGroup>
   <ItemGroup>
